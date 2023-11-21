@@ -142,18 +142,18 @@ WMM_Tinier myDeclination;
 lv_updatable_screen_t* screens[] = {
 
   &windScreen,
-  &heelScreen,
-  &rudderScreen,
-  &engineScreen,
-  &autopilotScreen,
+  //&heelScreen,
+  //&rudderScreen,
+  //&engineScreen,
+  //&autopilotScreen,
 #ifdef ENABLE_MPD  // TODO:
   &playerScreen,
 #endif
-  &victronScreen,
-  &tanksScreen,
+  //&victronScreen,
+  //&tanksScreen,
   &vesselScreen,
   &rebootScreen,
-  &aboutScreen,
+  //&aboutScreen,
   &devStatusScreen,
   &clockScreen,
   &compassScreen,
@@ -161,7 +161,7 @@ lv_updatable_screen_t* screens[] = {
   &weatherScreen,
   &gpsScreen,
   &speedScreen,
-  &depthScreen,
+  //&depthScreen,
 };
 
 int page = 0;
@@ -271,7 +271,6 @@ void setup() {
   });
 
   SpeakerInit();
-  DingDong();
 }
 
 unsigned long last_ui_upd = 0;
