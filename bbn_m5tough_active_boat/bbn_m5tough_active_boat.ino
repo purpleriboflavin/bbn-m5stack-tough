@@ -138,6 +138,7 @@ WMM_Tinier myDeclination;
 #include "ui_weather.h"
 #include "ui_power_victron.h"
 #include "ui_vessel_info.h"
+#include "ui_barometer.h"
 
 lv_updatable_screen_t* screens[] = {
 
@@ -162,6 +163,7 @@ lv_updatable_screen_t* screens[] = {
   &gpsScreen,
   &speedScreen,
   //&depthScreen,
+  &barometerScreen
 };
 
 int page = 0;
@@ -234,6 +236,7 @@ void setup() {
     init_rebootScreen();
     init_devStatusScreen();
     init_vesselScreen();
+    init_barometerScreen();
 
     init_screen(*screens[page]);
     lv_scr_load(screens[page]->screen);
@@ -286,11 +289,11 @@ void loop() {
 #endif
 
   if (!settingMode) {
-    if (last_touched > 0 && millis() - last_touched > GO_SLEEP_TIMEOUT) {
-      disconnect_clients();
-      save_page(page);
-      deep_sleep_with_touch_wakeup();
-    } else {
+    //if (last_touched > 0 && millis() - last_touched > GO_SLEEP_TIMEOUT) {
+      //disconnect_clients();
+      //save_page(page);
+      //deep_sleep_with_touch_wakeup();
+    //} else {
       if (victron_mqtt_began) {
         victron_mqtt_client_loop(mqttClient);
       }
@@ -300,7 +303,7 @@ void loop() {
         derive_data();
         update_screen(*screens[page]);
         last_ui_upd = millis();
-      }
+      //}
 #ifdef ENABLE_SCREEN_SERVER
       // (not for production)
       if (detected) {
