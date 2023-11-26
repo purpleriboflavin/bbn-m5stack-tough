@@ -72,7 +72,7 @@ TinyGPSPlus gps;
 #include "hw_rtc.h"
 #include "hw_sound.h"
 #include "hw_sleep.h"
-#include "net_ntp_time.h"
+//#include "net_ntp_time.h"
 #include "net_mdns.h"
 #include "net_http.h"
 #include "ui_init.h"
@@ -213,7 +213,7 @@ void setup() {
   }
 
   settingUpWiFi([]() {
-    init_dateTime();
+    //init_dateTime();
 
     init_windScreen();
     init_weatherScreen();
@@ -274,6 +274,8 @@ void setup() {
   });
 
   SpeakerInit();
+
+  Serial.begin(115200);
 }
 
 unsigned long last_ui_upd = 0;

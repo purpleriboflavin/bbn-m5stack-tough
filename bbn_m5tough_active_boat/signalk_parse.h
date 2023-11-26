@@ -21,6 +21,8 @@ extern "C" {
     }
   }
 
+  bool firstLoop = true;
+
   bool signalk_parse(Stream& stream) {
     bool found = false;
     DynamicJsonDocument doc(4096);
@@ -88,6 +90,25 @@ extern "C" {
             if (value.is<float>()) {
               shipDataModel.navigation.course_rhumbline.next_point.velocity_made_good.kn = value.as<float>() / _GPS_MPS_PER_KNOT;
               shipDataModel.navigation.course_rhumbline.next_point.velocity_made_good.age = millis();
+            }
+          } else if (strcmp(t, "datetime") == 0) {
+            if (value.is<String>()) {
+              String val = value.as<String>();
+              if (val != NULL) {
+                if (firstLoop) {
+                  RTCdate.Year = val.substring(0, 4).toInt();                  
+                  RTCdate.Month = val.substring(5 ,7).toInt();                 
+                  RTCdate.Date = val.substring(8, 10).toInt();
+                  M5.Rtc.SetDate(&RTCdate);
+
+                
+                  RTCtime.Hours = val.substring(11, 13).toInt();
+                  RTCtime.Minutes = val.substring(14, 17).toInt();                
+                  RTCtime.Seconds = val.substring(20, 22).toInt();
+                  M5.Rtc.SetTime(&RTCtime);
+                  firstLoop = false;
+                }
+              }
             }
           } else if (strcmp(t, "state") == 0) {
             if (value.is<String>()) {

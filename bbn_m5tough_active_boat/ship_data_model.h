@@ -485,7 +485,7 @@ extern "C" {
     struct _deg_C_t coolant_temp;
     struct _hPa_t coolant_pressure;
     struct _voltage_V_t alternator_voltage;
-    char engine_label[MAX_ENGINE_LBL_LENGTH] = {0};
+    char engine_label[MAX_ENGINE_LBL_LENGTH] = { 0 };
   } engine_t;
 
   typedef struct _propulsion_t {
@@ -510,9 +510,9 @@ extern "C" {
   } design_t;
 
   typedef struct _vessel_t {
-    char name[51] = {0};
-    char call_sign[12] = {0};
-    char mmsi[10] = {0};
+    char name[51] = { 0 };
+    char call_sign[12] = { 0 };
+    char mmsi[10] = { 0 };
   } vessel_t;
 
   typedef struct _ship_data_t {
