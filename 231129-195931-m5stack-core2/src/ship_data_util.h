@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #define TWO_MINUTES 120000
+#define TEN_MINUTES 600000
 #define LONG_EXPIRE_TO 172800000
 
 #define NM_TO_METERS 1852.0
