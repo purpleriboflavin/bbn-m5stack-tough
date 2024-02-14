@@ -309,7 +309,6 @@ extern "C"
               if (value.is<String>())
               {
                 String val = value.as<String>();
-                Serial.println(val);
                 if (val != NULL)
                 {
                   tm sunrise;
@@ -329,7 +328,6 @@ extern "C"
               if (value.is<String>())
               {
                 String val = value.as<String>();
-                Serial.println(val);
                 if (val != NULL)
                 {
                   tm sunset;

@@ -109,7 +109,7 @@ extern "C" {
                          
     lv_label_set_text(weather_sunrise_label,
                       (String(F("Sunrise:                       "))
-                       + tmToTimeString(shipDataModel.environment.sunrise.t))
+                       + tmToTimeString(utcToTimeWithOffset(shipDataModel.environment.sunrise.t)))
                         .c_str());
     lv_label_set_text(weather_daylight_label,
                       (String(F("Day Duration:           "))
@@ -117,7 +117,7 @@ extern "C" {
                         .c_str());
     lv_label_set_text(weather_sunset_label,
                       (String(F("Sunset:                        "))
-                       + tmToTimeString(shipDataModel.environment.sunset.t))
+                       + tmToTimeString(utcToTimeWithOffset(shipDataModel.environment.sunset.t)))
                         .c_str());
     lv_label_set_text(weather_twilight_label,
                       (String(F("Twilight Duration:  "))
