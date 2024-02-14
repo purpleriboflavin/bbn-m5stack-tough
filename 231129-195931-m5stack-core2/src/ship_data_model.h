@@ -246,7 +246,7 @@ extern "C" {
 
   typedef struct _environment_t {
     struct _env_time_t time_gps;
-    struct _env_time_t time_net;
+    struct _env_time_t time_local;
     struct _wind_t wind;
     struct _depth_t depth;
     struct _depth_t depth_before;
@@ -254,8 +254,8 @@ extern "C" {
     struct _water_t water;
     struct _air_t air_outside;
     struct _env_inside_t env_inside;
-    struct _hour_float_t sunrise;
-    struct _hour_float_t sunset;
+    struct _env_time_t sunrise;
+    struct _env_time_t sunset;
     int no_sunset_flag = 0;
     int no_dark_flag = 0;
     struct _hour_float_t daylight_duration;

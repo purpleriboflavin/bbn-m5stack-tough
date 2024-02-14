@@ -6,6 +6,8 @@ extern "C"
 {
 #endif
 
+  bool firstLoop = true;
+
   void set_vessel_nav_state(String &val)
   {
     if (val == "moored")
@@ -141,17 +143,17 @@ extern "C"
               String val = value.as<String>();
               if (val != NULL)
               {
-                if (fresh(shipDataModel.environment.time_gps.age, TEN_MINUTES))
+                if (firstLoop)
                 {
-                  tm time;
-                  time.tm_sec = val.substring(20, 22).toInt();
-                  time.tm_min = val.substring(14, 17).toInt();
-                  time.tm_hour = val.substring(11, 13).toInt();
-                  time.tm_mday = val.substring(8, 10).toInt();
-                  time.tm_mon = val.substring(5, 7).toInt();
-                  time.tm_year = val.substring(0, 4).toInt();
+                  tm gpsTime;
+                  gpsTime.tm_sec = val.substring(20, 22).toInt();
+                  gpsTime.tm_min = val.substring(14, 17).toInt();
+                  gpsTime.tm_hour = val.substring(11, 13).toInt();
+                  gpsTime.tm_mday = val.substring(8, 10).toInt();
+                  gpsTime.tm_mon = val.substring(5, 7).toInt();
+                  gpsTime.tm_year = val.substring(0, 4).toInt();
 
-                  shipDataModel.environment.time_gps.t = time;
+                  shipDataModel.environment.time_gps.t = gpsTime;
                   shipDataModel.environment.time_gps.age = millis();
 
                   RTCdate.Year = shipDataModel.environment.time_gps.t.tm_year;
@@ -163,6 +165,7 @@ extern "C"
                   RTCtime.Minutes = shipDataModel.environment.time_gps.t.tm_min;
                   RTCtime.Seconds = shipDataModel.environment.time_gps.t.tm_sec;
                   M5.Rtc.SetTime(&RTCtime);
+                  firstLoop = false;
                 }
               }
             }
@@ -295,6 +298,51 @@ extern "C"
               {
                 shipDataModel.environment.air_outside.illuminance.lux = value.as<float>();
                 shipDataModel.environment.air_outside.illuminance.age = millis();
+              }
+            }
+          }
+          else if (starts_with(t, "sunlight."))
+          {
+            const char *sl = step_into_token(t);
+            if (strcmp(sl, "times.sunrise") == 0)
+            {
+              if (value.is<String>())
+              {
+                String val = value.as<String>();
+                Serial.println(val);
+                if (val != NULL)
+                {
+                  tm sunrise;
+                  sunrise.tm_sec = val.substring(20, 22).toInt();
+                  sunrise.tm_min = val.substring(14, 17).toInt();
+                  sunrise.tm_hour = val.substring(11, 13).toInt();
+                  sunrise.tm_mday = val.substring(8, 10).toInt();
+                  sunrise.tm_mon = val.substring(5, 7).toInt();
+                  sunrise.tm_year = val.substring(0, 4).toInt();
+
+                  shipDataModel.environment.sunrise.t = sunrise;
+                  shipDataModel.environment.sunrise.age = millis();
+                }
+              }
+            }else if (strcmp(sl, "times.sunset") == 0)
+            {
+              if (value.is<String>())
+              {
+                String val = value.as<String>();
+                Serial.println(val);
+                if (val != NULL)
+                {
+                  tm sunset;
+                  sunset.tm_sec = val.substring(20, 22).toInt();
+                  sunset.tm_min = val.substring(14, 17).toInt();
+                  sunset.tm_hour = val.substring(11, 13).toInt();
+                  sunset.tm_mday = val.substring(8, 10).toInt();
+                  sunset.tm_mon = val.substring(5, 7).toInt();
+                  sunset.tm_year = val.substring(0, 4).toInt();
+
+                  shipDataModel.environment.sunset.t = sunset;
+                  shipDataModel.environment.sunset.age = millis();
+                }
               }
             }
           }

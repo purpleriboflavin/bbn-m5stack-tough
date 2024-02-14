@@ -40,6 +40,8 @@
 #include <MQTT.h>  // https://github.com/256dpi/arduino-mqtt
 #include <HTTPClient.h>
 #include <Preferences.h>
+#include <timeUtils.h>
+
 
 // config store.
 Preferences preferences;
@@ -72,7 +74,6 @@ TinyGPSPlus gps;
 #include "hw_rtc.h"
 #include "hw_sound.h"
 #include "hw_sleep.h"
-//#include "net_ntp_time.h"
 #include "net_mdns.h"
 #include "net_http.h"
 #include "ui_init.h"
@@ -81,6 +82,7 @@ TinyGPSPlus gps;
 #include "ui_screens.h"
 #include "ui_settings.h"
 #include "ui_clock.h"
+
 
 #ifdef ENABLE_SCREEN_SERVER  // This server sends screenshots via serial to processing.org sketch running on PC
 // See https://github.com/Bodmer/TFT_eSPI/blob/master/examples/Generic/TFT_Screen_Capture/processing_sketch.ino
@@ -214,8 +216,6 @@ void setup() {
   }
 
   settingUpWiFi([]() {
-    //init_dateTime();
-
     init_windScreen();
     init_weatherScreen();
     init_engineScreen();
@@ -283,6 +283,8 @@ void setup() {
 unsigned long last_ui_upd = 0;
 
 #define GO_SLEEP_TIMEOUT 1800000ul
+
+
 
 void loop() {
   M5.update();
