@@ -114,13 +114,6 @@ extern "C" {
       shipDataModel.navigation.course_over_ground_true.deg = gps.course.deg();
       shipDataModel.navigation.course_over_ground_true.age = millis();
     }
-    if (gps.time.isUpdated()) {
-      tm new_time = gps_time_to_tm(gps.date, gps.time);
-      //if (difftime(mktime(&new_time), mktime(&(shipDataModel.environment.time_gps.t))) > 0) {
-      shipDataModel.environment.time_gps.t = new_time;
-      shipDataModel.environment.time_gps.age = millis();
-      //}
-    }
     if (headingTrue.isUpdated() && headingTrue.isValid()) {
       shipDataModel.navigation.heading_true.deg = norm_deg(parse_float(headingTrue.value()));
       shipDataModel.navigation.heading_true.age = millis();

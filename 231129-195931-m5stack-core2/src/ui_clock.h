@@ -1,8 +1,12 @@
 #ifndef UI_CLOCK_H
 #define UI_CLOCK_H
 
+#include <chrono>
+#include <ctime>
+
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
   lv_updatable_screen_t clockScreen;
@@ -17,9 +21,10 @@ extern "C" {
   lv_obj_t *labelTime;
 
   /**
-   * A clock display 
+   * A clock display
    */
-  static void lv_clock_display(lv_obj_t *parent) {
+  static void lv_clock_display(lv_obj_t *parent)
+  {
     clock_display = lv_meter_create(parent);
     lv_obj_set_style_pad_all(clock_display, 5, LV_PART_MAIN);
 
@@ -57,29 +62,43 @@ extern "C" {
     indic_hour = lv_meter_add_needle_line(clock_display, scale, 7, lv_palette_main(LV_PALETTE_RED), -42);
   }
 
-  static void set_clock_value(void *indic, int32_t v) {
+  static void set_clock_value(void *indic, int32_t v)
+  {
     lv_meter_set_indicator_value(clock_display, (lv_meter_indicator_t *)indic, v);
   }
 
-  static void clock_update_cb() {
+  static void clock_update_cb()
+  {
     M5.Rtc.GetDate(&RTCdate);
     M5.Rtc.GetTime(&RTCtime);
-    set_clock_value(indic_hour, ((RTCtime.Hours % 12) * 60 + RTCtime.Minutes) / 12);
-    set_clock_value(indic_min, RTCtime.Minutes);
-    set_clock_value(indic_sec, RTCtime.Seconds);
+
+    tm utcTime = {};
+    utcTime.tm_sec = RTCtime.Seconds;
+    utcTime.tm_min = RTCtime.Minutes;
+    utcTime.tm_hour = RTCtime.Hours;
+    utcTime.tm_mday = RTCdate.Date;
+    utcTime.tm_mon = RTCdate.Month;
+    utcTime.tm_year = RTCdate.Year;
+
+    tm localTime = utcToTimeWithOffset(utcTime);
+
+    set_clock_value(indic_hour, ((localTime.tm_hour % 12) * 60 + localTime.tm_min) / 12);
+    set_clock_value(indic_min, localTime.tm_min);
+    set_clock_value(indic_sec, localTime.tm_sec);
 
     char bufferDate[14];
     char bufferTime[12];
 
-    sprintf(bufferDate, "%04d-%02d-%02d", RTCdate.Year, RTCdate.Month, RTCdate.Date);
-    sprintf(bufferTime, "%02d:%02d:%02d", RTCtime.Hours, RTCtime.Minutes, RTCtime.Seconds);
+    sprintf(bufferDate, "%04d-%02d-%02d", localTime.tm_year, localTime.tm_mon, localTime.tm_mday);
+    sprintf(bufferTime, "%02d:%02d:%02d", localTime.tm_hour, localTime.tm_min, localTime.tm_sec);
 
     lv_label_set_text(labelDate, bufferDate);
     lv_label_set_text(labelTime, bufferTime);
   }
 
-  void init_clockScreen() {
-    clockScreen.screen = lv_obj_create(NULL);  // Creates a Screen object
+  void init_clockScreen()
+  {
+    clockScreen.screen = lv_obj_create(NULL); // Creates a Screen object
     clockScreen.init_cb = lv_clock_display;
     clockScreen.update_cb = clock_update_cb;
   }
