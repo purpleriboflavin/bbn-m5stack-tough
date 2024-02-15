@@ -256,6 +256,8 @@ extern "C" {
     struct _env_inside_t env_inside;
     struct _env_time_t sunrise;
     struct _env_time_t sunset;
+    struct _env_time_t moonrise;
+    struct _env_time_t moonset;
     int no_sunset_flag = 0;
     int no_dark_flag = 0;
     struct _hour_float_t daylight_duration;

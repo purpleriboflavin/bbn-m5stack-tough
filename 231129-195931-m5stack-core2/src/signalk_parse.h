@@ -343,6 +343,48 @@ extern "C"
                 }
               }
             }
+          }  else if (starts_with(t, "moon."))
+          {
+            const char *sl = step_into_token(t);
+            if (strcmp(sl, "times.rise") == 0)
+            {
+              if (value.is<String>())
+              {
+                String val = value.as<String>();
+                if (val != NULL)
+                {
+                  tm moonrise;
+                  moonrise.tm_sec = val.substring(20, 22).toInt();
+                  moonrise.tm_min = val.substring(14, 17).toInt();
+                  moonrise.tm_hour = val.substring(11, 13).toInt();
+                  moonrise.tm_mday = val.substring(8, 10).toInt();
+                  moonrise.tm_mon = val.substring(5, 7).toInt();
+                  moonrise.tm_year = val.substring(0, 4).toInt();
+
+                  shipDataModel.environment.moonrise.t = moonrise;
+                  shipDataModel.environment.moonrise.age = millis();
+                }
+              }
+            }else if (strcmp(sl, "times.set") == 0)
+            {
+              if (value.is<String>())
+              {
+                String val = value.as<String>();
+                if (val != NULL)
+                {
+                  tm moonset;
+                  moonset.tm_sec = val.substring(20, 22).toInt();
+                  moonset.tm_min = val.substring(14, 17).toInt();
+                  moonset.tm_hour = val.substring(11, 13).toInt();
+                  moonset.tm_mday = val.substring(8, 10).toInt();
+                  moonset.tm_mon = val.substring(5, 7).toInt();
+                  moonset.tm_year = val.substring(0, 4).toInt();
+
+                  shipDataModel.environment.moonset.t = moonset;
+                  shipDataModel.environment.moonset.age = millis();
+                }
+              }
+            }
           }
         }
         else if (starts_with(p, "steering."))
