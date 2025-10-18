@@ -155,13 +155,13 @@ lv_updatable_screen_t* screens[] = {
   &rebootScreen,
   //&aboutScreen,
   &devStatusScreen,
-  &clockScreen,
+  //&clockScreen,
   &compassScreen,
   &tripDataScreen,
   &weatherScreen,
   &gpsScreen,
   &speedScreen,
-  //&depthScreen,
+  &depthScreen,
 };
 
 int page = 0;
@@ -286,11 +286,7 @@ void loop() {
 #endif
 
   if (!settingMode) {
-    if (last_touched > 0 && millis() - last_touched > GO_SLEEP_TIMEOUT) {
-      disconnect_clients();
-      save_page(page);
-      deep_sleep_with_touch_wakeup();
-    } else {
+    
       if (victron_mqtt_began) {
         victron_mqtt_client_loop(mqttClient);
       }
@@ -300,7 +296,7 @@ void loop() {
         derive_data();
         update_screen(*screens[page]);
         last_ui_upd = millis();
-      }
+      
 #ifdef ENABLE_SCREEN_SERVER
       // (not for production)
       if (detected) {
